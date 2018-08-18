@@ -403,7 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: effe0daac78b64946bef4de3c1e8eddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1009120482348418, guid: 0bda06a3f12314ea6905843ebea8d385,
+  playerPrefab: {fileID: 1009120482348418, guid: da2dbfe51a20541a98efc6b17546e669,
     type: 2}
 --- !u!4 &1180638367
 Transform:
@@ -430,11 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioClips:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 21001f38a404c4053a148712e72e2ce1, type: 3}
 --- !u!82 &1180638369
 AudioSource:
   m_ObjectHideFlags: 0
@@ -444,11 +440,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
+  m_audioClip: {fileID: 8300000, guid: 21001f38a404c4053a148712e72e2ce1, type: 3}
+  m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

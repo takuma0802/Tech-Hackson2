@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using UniRx;
 using System;
 
-public class ThornGimmick : MonoBehaviour, IBaseGimmick
-{
-    [SerializeField] private GameObject gimmickBody;
+public class AppearBlock : MonoBehaviour,IBaseGimmick {
+
+	[SerializeField] private GameObject gimmickBody;
 
     private BaseGimmickTrigger triggerObject;
 
@@ -29,18 +28,19 @@ public class ThornGimmick : MonoBehaviour, IBaseGimmick
             });
     }
 
-    void OnTriggerEnter2D(Collider2D col)
-    {
-		GetComponent<BoxCollider2D>().enabled = false;
-        var player = col.GetComponent<IDamagable>();
-        if (player != null)
-        {
-			player.Damage();
-        }
-    }
+    // void OnTriggerEnter2D(Collider2D col)
+    // {
+	// 	GetComponent<BoxCollider2D>().enabled = false;
+    //     var player = col.GetComponent<IDamagable>();
+    //     if (player != null)
+    //     {
+	// 		player.Damage();
+    //     }
+    // }
 
     private void AppearGimmick()
     {
         gimmickBody.SetActive(true);
+		
     }
 }

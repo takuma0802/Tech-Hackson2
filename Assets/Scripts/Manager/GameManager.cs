@@ -48,14 +48,7 @@ public class GameManager : MonoBehaviour
         .SkipLatestValueOnSubscribe()
         .Subscribe(x =>
         {
-            if (x > 0)
-            {
                 ChangeScene(SceneState.Life);
-            }
-            else
-            {
-                ChangeScene(SceneState.GameOver);
-            }
         });
     }
 
@@ -92,8 +85,7 @@ public class GameManager : MonoBehaviour
 
     private void TitleState()
     {
-        //audioManager.PlayBGM(AudioType.TitleBGM);
-        Debug.Log("Title");
+        audioManager.PlayBGM(AudioType.TitleBGM);
     }
 
     private void LifeState()
@@ -102,7 +94,7 @@ public class GameManager : MonoBehaviour
         // var text = GameObject.Find("Canvas/LifeNumber").GetComponent<Text>();  // くっそ最悪じゃああｗｗｗ
         // text.text = playerLife.ToString();
 
-        Observable.Timer(TimeSpan.FromSeconds(3)).Subscribe(_ =>
+        Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
         {
             ChangeScene(SceneState.Game);
         }).AddTo(this);
@@ -112,7 +104,7 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneState.Game.ToString());
         yield return gimmickManager.SetAllGimmicks();
-        //audioManager.PlayBGM(AudioType.GameBGM);
+        audioManager.PlayBGM(AudioType.TitleBGM);
         
         player = Instantiate(playerPrefab).GetComponent<PlayerCore>();
         player.IsAlive
@@ -120,7 +112,6 @@ public class GameManager : MonoBehaviour
             .Where(x => x == false)
             .Subscribe(_ =>
             {
-                Debug.Log("死んだ！");
                 playerLife.Value -= 1;
             });
 
