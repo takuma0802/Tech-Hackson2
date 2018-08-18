@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager Instance;
+    [SerializeField] private GameObject playerPrefab;
+    private PlayerCore player;
 
     private SceneStateReactiveProperty currentScene = new SceneStateReactiveProperty(SceneState.Title);
     public IReadOnlyReactiveProperty<SceneState> CurrentSceneState { get { return currentScene; } }
@@ -41,6 +43,20 @@ public class GameManager : MonoBehaviour
             {
                 OnStateChanged(state);
             });
+
+        playerLife
+        .SkipLatestValueOnSubscribe()
+        .Subscribe(x =>
+        {
+            if (x > 0)
+            {
+                ChangeScene(SceneState.Life);
+            }
+            else
+            {
+                ChangeScene(SceneState.GameOver);
+            }
+        });
     }
 
     private void OnStateChanged(SceneState nextScene)
@@ -54,7 +70,7 @@ public class GameManager : MonoBehaviour
                 LifeState();
                 break;
             case SceneState.Game:
-                GameState();
+                StartCoroutine(GameState());
                 break;
             case SceneState.GameOver:
                 GameOverState();
@@ -86,20 +102,38 @@ public class GameManager : MonoBehaviour
         // var text = GameObject.Find("Canvas/LifeNumber").GetComponent<Text>();  // くっそ最悪じゃああｗｗｗ
         // text.text = playerLife.ToString();
 
-        Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(_ =>
+        Observable.Timer(TimeSpan.FromSeconds(3)).Subscribe(_ =>
         {
             ChangeScene(SceneState.Game);
         }).AddTo(this);
     }
 
-    private void GameState()
+    private IEnumerator GameState()
     {
         SceneManager.LoadScene(SceneState.Game.ToString());
+        yield return gimmickManager.SetAllGimmicks();
         //audioManager.PlayBGM(AudioType.GameBGM);
+        
+        player = Instantiate(playerPrefab).GetComponent<PlayerCore>();
+        player.IsAlive
+            .SkipLatestValueOnSubscribe()
+            .Where(x => x == false)
+            .Subscribe(_ =>
+            {
+                Debug.Log("死んだ！");
+                playerLife.Value -= 1;
+            });
+
     }
 
     private void GameOverState()
     {
-        audioManager.StopBGM();
+        SceneManager.LoadScene(SceneState.GameOver.ToString());
+        
+        Observable.Timer(TimeSpan.FromSeconds(3)).Subscribe(_ =>
+        {
+            ChangeScene(SceneState.Title);
+            SceneManager.LoadScene(SceneState.Title.ToString());
+        }).AddTo(this);
     }
 }

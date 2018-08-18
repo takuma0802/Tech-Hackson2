@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
-public abstract class PlayerCore : MonoBehaviour
+public abstract class PlayerCore : MonoBehaviour, IDamagable
 {
 
     protected ReactiveProperty<bool> isAlive = new BoolReactiveProperty(true);
@@ -22,4 +22,11 @@ public abstract class PlayerCore : MonoBehaviour
     }
 
     protected abstract void OnInitialize();
+
+    public void Damage()
+    {
+        isAlive.Value = false;
+    }
+
+
 }

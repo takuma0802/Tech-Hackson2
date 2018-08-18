@@ -5,36 +5,42 @@ using DG.Tweening;
 using UniRx;
 using System;
 
-public class ThornGimmick : MonoBehaviour , IBaseGimmick
+public class ThornGimmick : MonoBehaviour, IBaseGimmick
 {
-	[SerializeField] private GameObject gimmickBody;
-	
-	private BaseGimmickTrigger triggerObject;
+    [SerializeField] private GameObject gimmickBody;
 
-	void Start()
-	{
-		
-	}
+    private BaseGimmickTrigger triggerObject;
+
+    void Start()
+    {
+        OnInitialize();
+    }
 
     public void OnInitialize()
-	{
-		gimmickBody.SetActive(false);
+    {
+		Debug.Log("呼ばれた。");
+        gimmickBody.SetActive(false);
 
-		triggerObject = GetComponentInChildren<BaseGimmickTrigger>();
-		triggerObject.OnTrigger
-			.SkipLatestValueOnSubscribe()
-			.Subscribe(_ => 
-			{
-				AppearGimmick();
-			});
-	}
+        triggerObject = GetComponentInChildren<BaseGimmickTrigger>();
+        triggerObject.OnTrigger
+            .SkipLatestValueOnSubscribe()
+            .Subscribe(_ =>
+            {
+                AppearGimmick();
+            });
+    }
 
-	void OnTriggerEnter2D(Collider2D col)
-	{
-		Debug.Log("死んだ！");
-	}
+    void OnTriggerEnter2D(Collider2D col)
+    {
+		GetComponent<BoxCollider2D>().enabled = false;
+        var player = col.GetComponent<IDamagable>();
+        if (player != null)
+        {
+			player.Damage();
+        }
+    }
 
-	private void AppearGimmick()
+    private void AppearGimmick()
     {
         gimmickBody.SetActive(true);
     }
