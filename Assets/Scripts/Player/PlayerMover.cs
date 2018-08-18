@@ -83,7 +83,7 @@ public class PlayerMover : PlayerCore
     private void Jump()
     {
         rb.AddForce(transform.up * jumpForce);
-        audioSource.PlayOneShot(sounds[0]); //ジャンプ音
+        //audioSource.PlayOneShot(sounds[0]); //ジャンプ音
 
         isGround.Value = false;
     }

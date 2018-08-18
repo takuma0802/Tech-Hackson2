@@ -223,10 +223,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 092a8c9e644654e628f8ec86f5720b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runThreshold: 1
-  runSpeed: 0.5
+  runThreshold: 0.5
+  runSpeed: 1.6
   runForce: 100
-  jumpForce: 300
+  jumpForce: 310
   filter2d:
     useTriggers: 0
     useLayerMask: 0
@@ -241,6 +241,8 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 70
     maxNormalAngle: 110
+  sounds:
+  - {fileID: 8300000, guid: 11bc639dd509042c5a167207a13e1ec4, type: 3}
 --- !u!114 &114863656560506576
 MonoBehaviour:
   m_ObjectHideFlags: 1

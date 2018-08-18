@@ -24,13 +24,13 @@ public class AudioManager : MonoBehaviour
 
 	public void PlayBGM(AudioType audio)
 	{
-		audioSource.clip = audioClips[(int)audio];
-		audioSource.Play();
+		//audioSource.clip = audioClips[0];
+		//audioSource.Play();
 	}
 
 	public void StopBGM()
 	{
-		audioSource.clip = null;
-		audioSource.Stop();
+		// audioSource.clip = null;
+		// audioSource.Stop();
 	}
 }
