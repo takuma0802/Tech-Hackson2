@@ -7,15 +7,18 @@ using System;
 
 public class PlayerMover : PlayerCore
 {
-    [SerializeField] private float runThreshold = 1f;
-    [SerializeField] private float runSpeed = 0.1f;
-    [SerializeField] private float runForce = 50f;
-    [SerializeField] private float jumpForce = 300f;
+    [SerializeField] private float runThreshold = 0.5f;
+    [SerializeField] private float runSpeed = 1.8f;
+    [SerializeField] private float runForce = 180f;
+    [SerializeField] private float jumpForce = 330f;
 
     [SerializeField] private ContactFilter2D filter2d;
     private Vector2 inputDirection;
     private PlayerInputProvider inputProvider;
     private Rigidbody2D rb;
+
+    private AudioSource audioSource;
+    public AudioClip[] sounds;
 
     protected override void OnInitialize()
     {
@@ -34,7 +37,7 @@ public class PlayerMover : PlayerCore
                 }
                 else
                 {
-					value = x.normalized * runForce * 0.5f;
+					value = x.normalized * runForce * 1.2f;
                 }
 
                 inputDirection = value;
@@ -80,6 +83,8 @@ public class PlayerMover : PlayerCore
     private void Jump()
     {
         rb.AddForce(transform.up * jumpForce);
+        audioSource.PlayOneShot(sounds[0]); //ジャンプ音
+
         isGround.Value = false;
     }
 
