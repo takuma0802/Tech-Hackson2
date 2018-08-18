@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System;
+using UnityEngine.SceneManagement;
+using System.Linq;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,9 +15,9 @@ public class GameManager : MonoBehaviour
     private SceneStateReactiveProperty currentScene = new SceneStateReactiveProperty(SceneState.Title);
     public IReadOnlyReactiveProperty<SceneState> CurrentSceneState { get { return currentScene; } }
 
-	private IntReactiveProperty playerLife = new IntReactiveProperty(3);
-
-	private GimmickManager gimmickManager;
+    private IntReactiveProperty playerLife = new IntReactiveProperty(3);
+    private GimmickManager gimmickManager;
+    private AudioManager audioManager;
 
     private void OnEnable()
     {
@@ -31,8 +34,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-		gimmickManager = GetComponent<GimmickManager>();
-		
+        gimmickManager = GetComponent<GimmickManager>();
+        audioManager = GetComponent<AudioManager>();
+
         CurrentSceneState.Subscribe(state =>
             {
                 OnStateChanged(state);
@@ -44,20 +48,25 @@ public class GameManager : MonoBehaviour
         switch (nextScene)
         {
             case SceneState.Title:
-				TitleState();
+                TitleState();
                 break;
             case SceneState.Life:
-				LifeState();
+                LifeState();
                 break;
             case SceneState.Game:
-				GameState();
+                GameState();
                 break;
             case SceneState.GameOver:
-				GameOverState();
+                GameOverState();
                 break;
             default:
                 break;
         }
+    }
+
+    public void OnClickGameStartButton()
+    {
+        ChangeScene(SceneState.Life);
     }
 
     public void ChangeScene(SceneState stete)
@@ -65,23 +74,32 @@ public class GameManager : MonoBehaviour
         currentScene.Value = stete;
     }
 
-	private void TitleState()
-	{
+    private void TitleState()
+    {
+        //audioManager.PlayBGM(AudioType.TitleBGM);
+        Debug.Log("Title");
+    }
 
-	}
+    private void LifeState()
+    {
+        SceneManager.LoadScene(SceneState.Life.ToString());
+        // var text = GameObject.Find("Canvas/LifeNumber").GetComponent<Text>();  // くっそ最悪じゃああｗｗｗ
+        // text.text = playerLife.ToString();
 
-	private void LifeState()
-	{
+        Observable.Timer(TimeSpan.FromSeconds(2)).Subscribe(_ =>
+        {
+            ChangeScene(SceneState.Game);
+        }).AddTo(this);
+    }
 
-	}
+    private void GameState()
+    {
+        SceneManager.LoadScene(SceneState.Game.ToString());
+        //audioManager.PlayBGM(AudioType.GameBGM);
+    }
 
-	private void GameState()
-	{
-
-	}
-
-	private void GameOverState()
-	{
-
-	}
+    private void GameOverState()
+    {
+        audioManager.StopBGM();
+    }
 }
