@@ -14,7 +14,7 @@ public enum AudioType
 public class AudioManager : MonoBehaviour
 {
 
-	[SerializeField] AudioClip[] audioClips;
+	[SerializeField] private AudioClip[] audioClips;
     private AudioSource audioSource;
 
     void Start()

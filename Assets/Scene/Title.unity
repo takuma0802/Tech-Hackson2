@@ -403,6 +403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: effe0daac78b64946bef4de3c1e8eddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 1009120482348418, guid: 0bda06a3f12314ea6905843ebea8d385,
+    type: 2}
 --- !u!4 &1180638367
 Transform:
   m_ObjectHideFlags: 0
@@ -427,7 +429,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c307724f366f4b4bb38e3c7968d738f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClips: []
+  audioClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!82 &1180638369
 AudioSource:
   m_ObjectHideFlags: 0
