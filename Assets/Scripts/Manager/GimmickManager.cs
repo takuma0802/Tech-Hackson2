@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GimmickManager : MonoBehaviour {
 
+	[SerializeField] IBaseGimmick gimmicks;
+
 	// Use this for initialization
 	void Start () {
 		
