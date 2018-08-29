@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
 
     private IntReactiveProperty playerLife = new IntReactiveProperty(3);
     private GimmickManager gimmickManager;
-    private AudioManager audioManager;
+    private AudioManagerComponent audioManager;
+    public AudioManagerComponent AudioManager { get { return audioManager; } }
 
     private void OnEnable()
     {
@@ -37,7 +38,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         gimmickManager = GetComponent<GimmickManager>();
-        audioManager = GetComponent<AudioManager>();
+        audioManager = GetComponent<AudioManagerComponent>();
 
         CurrentSceneState.Subscribe(state =>
             {
@@ -48,7 +49,7 @@ public class GameManager : MonoBehaviour
         .SkipLatestValueOnSubscribe()
         .Subscribe(x =>
         {
-                ChangeScene(SceneState.Life);
+            ChangeScene(SceneState.Life);
         });
     }
 
@@ -85,7 +86,7 @@ public class GameManager : MonoBehaviour
 
     private void TitleState()
     {
-        audioManager.PlayBGM(AudioType.TitleBGM);
+        audioManager.PlayBGM(AudioType.BGM);
     }
 
     private void LifeState()
@@ -94,37 +95,41 @@ public class GameManager : MonoBehaviour
         // var text = GameObject.Find("Canvas/LifeNumber").GetComponent<Text>();  // くっそ最悪じゃああｗｗｗ
         // text.text = playerLife.ToString();
 
-        Observable.Timer(TimeSpan.FromSeconds(1)).Subscribe(_ =>
-        {
-            ChangeScene(SceneState.Game);
-        }).AddTo(this);
+        Observable.Timer(TimeSpan.FromSeconds(1))
+            .TakeUntilDestroy(this)
+            .Subscribe(_ =>
+            {
+                ChangeScene(SceneState.Game);
+            });
     }
 
     private IEnumerator GameState()
     {
         SceneManager.LoadScene(SceneState.Game.ToString());
         yield return gimmickManager.SetAllGimmicks();
-        audioManager.PlayBGM(AudioType.TitleBGM);
-        
+
         player = Instantiate(playerPrefab).GetComponent<PlayerCore>();
+
         player.IsAlive
             .SkipLatestValueOnSubscribe()
+            .TakeUntilDestroy(this)
             .Where(x => x == false)
             .Subscribe(_ =>
             {
                 playerLife.Value -= 1;
             });
-
     }
 
     private void GameOverState()
     {
         SceneManager.LoadScene(SceneState.GameOver.ToString());
-        
-        Observable.Timer(TimeSpan.FromSeconds(3)).Subscribe(_ =>
-        {
-            ChangeScene(SceneState.Title);
-            SceneManager.LoadScene(SceneState.Title.ToString());
-        }).AddTo(this);
+
+        Observable.Timer(TimeSpan.FromSeconds(3))
+            .TakeUntilDestroy(this)
+            .Subscribe(_ =>
+            {
+                ChangeScene(SceneState.Title);
+                SceneManager.LoadScene(SceneState.Title.ToString());
+            });
     }
 }

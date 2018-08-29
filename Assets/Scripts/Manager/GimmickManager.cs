@@ -8,7 +8,6 @@ public class GimmickManager : MonoBehaviour
     public IEnumerator SetAllGimmicks()
     {
 		var gimmicks = GameObject.FindGameObjectsWithTag("Enemy");
-		Debug.Log(gimmicks.Length);
         for (var i = 0; i < gimmicks.Length; i++)
         {
 			var enemy = gimmicks[i].GetComponent<IBaseGimmick>();
