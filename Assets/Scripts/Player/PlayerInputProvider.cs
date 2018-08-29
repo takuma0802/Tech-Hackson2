@@ -15,11 +15,13 @@ public class PlayerInputProvider : PlayerCore
     protected override void OnInitialize()
     {
         this.UpdateAsObservable()
-                .Select(_ => Input.GetKey(KeyCode.Space))
-                .DistinctUntilChanged()
-                .Subscribe(x => _jump.Value = x);
+            .TakeUntilDestroy(this)
+            .Select(_ => Input.GetKey(KeyCode.Space))
+            .DistinctUntilChanged()
+            .Subscribe(x => _jump.Value = x);
 
         this.UpdateAsObservable()
+            .TakeUntilDestroy(this)
             .Select(_ => new Vector3(Input.GetAxis("Horizontal"), 0, 0))
             .Subscribe(x => _moveDirection.SetValueAndForceNotify(x));
     }

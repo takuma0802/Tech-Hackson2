@@ -2,35 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AudioType
+public static class AudioManager
 {
-	TitleBGM = 0,
-	GameBGM= 1,
-	JumpSE= 2,
-	TogeSE= 3,
-	ExplosionSE= 4,
-}
+    private static AudioManagerComponent _audioManagerComponent;
 
-public class AudioManager : MonoBehaviour
-{
-
-	[SerializeField] private AudioClip[] audioClips;
-    private AudioSource audioSource;
-
-    void Start()
+    private static AudioManagerComponent Manager
     {
-        audioSource = GetComponent<AudioSource>();
+        get
+        {
+            if (_audioManagerComponent != null) return _audioManagerComponent;
+
+            _audioManagerComponent = GameManager.Instance.AudioManager;
+            return _audioManagerComponent;
+        }
     }
 
-	public void PlayBGM(AudioType audio)
-	{
-		//audioSource.clip = audioClips[0];
-		//audioSource.Play();
-	}
+    public static void PlayBGM(AudioType bgm)
+    {
+        Manager.PlayBGM(bgm);
+    }
 
-	public void StopBGM()
-	{
-		// audioSource.clip = null;
-		// audioSource.Stop();
-	}
+    public static void StopBGM()
+    {
+        Manager.StopBGM();
+    }
+
+    public static void PlaySoundEffect(AudioType soundEffect)
+    {
+        Manager.PlaySE(soundEffect);
+    }
 }

@@ -15,11 +15,9 @@ public enum SceneState
 [Serializable]
 public class SceneStateReactiveProperty : ReactiveProperty<SceneState>
 {
-
     public SceneStateReactiveProperty()
     {
     }
-
     public SceneStateReactiveProperty(SceneState initialValue) : base(initialValue)
     {
     }
